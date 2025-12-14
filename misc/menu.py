@@ -31,7 +31,7 @@ class Menu:
         clear_console()
         
         self.title = self.__prepare_title(title)
-        self.options = options + (help_cmd := HelpCommand(self),)
+        self.options =  (help_cmd := HelpCommand(self),) + options
         self.options_names = {option.name: option for option in self.options}
         # print(self.options_names)
         help_cmd.add_arguments()
@@ -48,24 +48,36 @@ class Menu:
     
     def display_title(self):
         print(self.title)
-        print()
         if self.description:
-            print(self.description)
             print()
+            print(self.description)
     
     def prompt(self):
+        print()
         res: str = inquirer.text(message="",
                             # completer={cmd.name: cmd.arguments for cmd in self.options}).execute()
                             completer=NestedCompleter.from_nested_dict({cmd.name: cmd.arguments for cmd in self.options}),
                             qmark='>', amark='>').execute()
         res_args = Menu.__separate_arguments(res)
-        self.options_names[res_args[0]](*res_args[1:])
+        return res_args
 
+    def execute(self, cmd: list[str]):
+        if cmd[0] not in self.options_names:
+            raise ArgumentError(f"Invalid command: {cmd[0]}")
+        self.options_names[cmd[0]](*cmd[1:])
+    
     def run(self):
         clear_console()
         self.display_title()
         while True:
-            self.prompt()
+            res = self.prompt()
+            try:
+                self.execute(res)
+            except ArgumentError as err:
+                print(err)
+            except Exception as err:
+                print(f"Unknown error: {err}")
+            
     
     
 class HelpCommand(Command):
@@ -85,6 +97,8 @@ class HelpCommand(Command):
             for command in self.__menu.options:
                 print(f"{command.name} - {command.description}")
         else:
+            if args[0] not in self.__menu.options_names:
+                raise ArgumentError(f"Invalid command as argument: {args[0]}")
             print(self.__menu.options_names[args[0]].description_long)
 
 
