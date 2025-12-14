@@ -1,19 +1,9 @@
 from typing import Any, Callable, Type
 from pyfiglet import Figlet
-import InquirerPy as inquirer
+from InquirerPy import inquirer
 import re as regex
 import os
 import builtins
-
-def input(validator: Callable[[tuple[str, ...]], bool]) -> tuple[str, ...]:
-    while True:
-        user_input = builtins.input("> ")
-        user_input = tuple(regex.findall(r'"[^"]*"|\S+', user_input))
-        user_input = tuple(i.strip('"') for i in user_input)
-        if validator(user_input):
-            return user_input
-        else:
-            print(f"Invalid command: {user_input[0]}")
 
 def clear_console():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -27,42 +17,44 @@ class Menu:
         
         self.title = self.__prepare_title(title)
         self.options = options
-        self.__options_names = {option.name: option for option in options}
+        self.options_names = {option.name: option for option in options}
         self.description = description
         
     def __prepare_title(self, title: str) -> str:
         figlet = Figlet(font="slant")
         return figlet.renderText(title)
     
-    def display(self, show_title: bool = False):
-        if show_title:
-            print(self.title)
-            print()
-            if self.description:
-                print(self.description)
-                
+    @staticmethod
+    def __separate_arguments(t: str):
+        p: list[str] = regex.findall(r'"[^"]*"|\S+', t)
+        return [i.strip() for i in p]
+    
+    def display_title(self):
+        print(self.title)
         print()
-        for option in self.options:
-            print(f"{option.name}: {option.description}")
+        if self.description:
+            print(self.description)
+            print()
     
     def prompt(self):
-        res = input(lambda cmd: cmd[0] in self.__options_names)
-        self.__options_names[res[0]]()(*res[1:])
+        res: str = inquirer.text(message="",
+                            completer={cmd: None for cmd in self.options_names}).execute()
+        res_args = Menu.__separate_arguments(res)
+        self.options_names[res_args[0]]()(*res_args[1:])
 
     def run(self):
-        show_title = True
         clear_console()
+        self.display_title()
         while True:
-            self.display(show_title)
-            show_title = False
             self.prompt()
 
 
 
 class Command:
     
-    name: str
-    description: str
+    name: str = ""
+    description: str = ""
+    description_long: str = ""
     
     def __call__(self, *args) -> Any:
         pass
