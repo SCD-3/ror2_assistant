@@ -1,8 +1,7 @@
 from typing import Any
-from misc.generic import ExitCommand, SaveFilePathCommand
-from misc.menu import Menu, Command
-from artifacts.artifacts_checklist import OpenArtifactCommand, ListArtifactsCommand
-from lunar_coin_control import SetCoinsCommand
+from misc.menu import Menu
+
+from commands import *
 
 # "C:\Program Files (x86)\Steam\userdata\851411552\632360\remote\UserProfiles\fddada63-5096-4d0d-8e6d-885d98884467.xml"
 
