@@ -121,5 +121,5 @@ class ListArtifactsCommand(Command):
     def __call__(self, *args) -> None:
         print("Available Artifacts:")
         for artifact in LIST_OF_ARTIFACTS.values():
-            status = "✓" if artifact.unlocked else "✗"
+            status = "\033[32m✓\033[0m" if artifact.unlocked else "\033[31m✗\033[0m"
             print(f"- {artifact.full_name.ljust(30)} {status}")
