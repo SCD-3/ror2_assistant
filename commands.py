@@ -1,3 +1,3 @@
 from artifacts.artifacts_checklist import OpenArtifactCommand, ListArtifactsCommand
 from lunar_coin_control import SetCoinsCommand
-from misc.generic import ExitCommand, SaveFilePathCommand
+from misc.generic import ExitCommand, SaveFileCommand

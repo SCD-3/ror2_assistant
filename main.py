@@ -15,7 +15,7 @@ if __name__ == "__main__":
                      OpenArtifactCommand(),
                      ListArtifactsCommand(), 
                      SetCoinsCommand(),
-                     SaveFilePathCommand(),
+                     SaveFileCommand(),
                      description="Assistant to game Risk of Rain 2\nType 'help' for help")
 
     main_menu.run()
