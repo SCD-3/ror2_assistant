@@ -78,7 +78,7 @@ class Menu:
             except ArgumentError as err:
                 print(err)
             except Exception as err:
-                print(f"Unknown error: {err}")
+                print(f"{err.__class__.__name__}: {err}")
             
     
     
