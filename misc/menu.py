@@ -9,7 +9,7 @@ def clear_console():
     # return
     os.system('cls' if os.name == 'nt' else 'clear')
 
-type Completion = dict[str, Completion|None]
+type Completion = dict[str, Completion|None]|None
 
 class Command:
     
@@ -17,8 +17,9 @@ class Command:
     description: str = ""
     description_long: str = ""
     
-    def __init__(self, *args, **kwargs) -> None:
-        self.arguments: Completion = {self.name: None}
+    @property
+    def arguments(self) -> Completion:
+        return None
     
     def __call__(self, *args) -> Any:
         pass
@@ -31,12 +32,13 @@ class Menu:
         clear_console()
         
         self.title = self.__prepare_title(title)
-        self.options =  (help_cmd := HelpCommand(self),) + options
-        self.options_names = {option.name: option for option in self.options}
-        # print(self.options_names)
-        help_cmd.add_arguments()
+        self.options =  [HelpCommand(self)] + list(options)
         self.description = description
-        
+    
+    @property
+    def options_names(self):
+        return {option.name: option for option in self.options}
+    
     def __prepare_title(self, title: str) -> str:
         figlet = Figlet(font="slant")
         return figlet.renderText(title)
@@ -89,8 +91,9 @@ class HelpCommand(Command):
     def __init__(self, menu: Menu) -> None:
         self.__menu = menu
     
-    def add_arguments(self):
-        self.arguments = {i: None for i in self.__menu.options_names.keys()}
+    @property
+    def arguments(self) -> Completion:
+        return {i: None for i in self.__menu.options_names.keys()}
     
     def __call__(self, *args) -> Any:
         if len(args) == 0:

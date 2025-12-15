@@ -3,7 +3,7 @@ import os.path
 from typing import final
 import re as regex
 
-from misc.menu import Command, ArgumentError
+from misc.menu import Command, ArgumentError, Completion
 from misc.generic import params
 
 @final
@@ -14,15 +14,33 @@ class Artifact:
     BLOOD  = '▲'
     SOUL   = '◆'
     
+    # Artifacts is immutable
     def __init__(self, name: str, /) -> None:
         fdir = os.path.dirname(__file__)
         self.__data = json.load(open(os.path.join(fdir, 'artifacts.json')))[name]
         
-        self.id: str          = name
-        self.name: str        = self.__data['name']
-        self.defname: str     = self.__data['defname']
-        self.description: str = self.__data['description']
-        self.code: list[list[str]] | str = self.__data['code']
+        self.__id: str          = name
+        self.__name: str        = self.__data['name']
+        self.__defname: str     = self.__data['defname']
+        self.__description: str = self.__data['description']
+        self.__code: list[list[str]] | str = self.__data['code']
+    
+    @property
+    def id(self):
+        return self.__id
+    @property
+    def name(self):
+        return self.__name
+    @property
+    def defname(self):
+        return self.__defname
+    @property
+    def description(self):
+        return self.__description
+    @property
+    def code(self):
+        return self.__code
+    
     
     def get_code(self) -> str:
         try:
@@ -62,7 +80,7 @@ class Artifact:
         return f"Artifact(name='{self.name}', defname='{self.defname}', description='{self.description}')"
     
     def __hash__(self) -> int:
-        return hash(self.id)
+        return hash(self.id + self.name + self.defname + self.description + str(self.code))
 
 LIST_OF_ARTIFACTS: dict[str, Artifact]
 LIST_OF_ARTIFACTS = {name: Artifact(name) for name in json.load(open(os.path.join(os.path.dirname(__file__), 'artifacts.json')))}
@@ -73,6 +91,11 @@ class OpenArtifactCommand(Command):
     
     name = "open"
     description = "Open artifact details. Takes artifact name as argument."
+    
+    @property
+    def arguments(self) -> Completion:
+        return {i: None for i in LIST_OF_ARTIFACTS}
+        
     
     def __call__(self, *args) -> None:
         
