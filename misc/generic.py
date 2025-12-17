@@ -57,5 +57,5 @@ class SaveFileCommand(Command):
             case 'reset':
                 proceed = inquirer.confirm(message="Are you sure?", default=False, qmark='>',amark='>').execute()
                 if proceed:
-                    params["save_file_path"] = ""
+                    params["save_file_path"] = None
                     print("Save file path has been removed.")

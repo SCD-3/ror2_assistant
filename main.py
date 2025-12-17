@@ -1,4 +1,3 @@
-from typing import Any
 from misc.menu import Menu
 
 from commands import *
@@ -12,8 +11,8 @@ if __name__ == "__main__":
     
     main_menu = Menu("Risk of Rain 2\nASSISTANT",
                      ExitCommand(),
-                     OpenArtifactCommand(),
-                     ListArtifactsCommand(), 
+                     OpenItemsCommand(),
+                     ListItemsCommand(), 
                      SetCoinsCommand(),
                      SaveFileCommand(),
                      description="Assistant to game Risk of Rain 2\nType 'help' for help")
