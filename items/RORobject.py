@@ -1,32 +1,32 @@
+from enum import StrEnum
+from typing import Iterable
+
 from misc.generic import params
 import xml.etree.ElementTree as ET
 
+
+class DLC(StrEnum):
+    
+    RoR2 = "Risk of Rain 2"
+    SofV = "Survivors of the Void"
+    SotS = "Seekers of the Storm"
+    AC   = "Alloyed Collective"
+
+
 class Achievement:
     
-    #immutable
     def __init__(self, name: str, 
                  defname: str, 
                  description: str,
+                 dlc: DLC|tuple[DLC, ...],
                  *,
                  steam_achievement: bool = True):
-        self.__name = name
-        self.__defname = defname
-        self.__description = description
-        self.__steam = steam_achievement
-
-    @property
-    def name(self):
-        return self.__name
-    @property
-    def defname(self):
-        return self.__defname
-    @property
-    def description(self):
-        return self.__description
-    @property
-    def steam_achievement(self):
-        return self.__steam
-    
+        
+        self.name = name
+        self.defname = defname
+        self.description = description
+        self.dlc = tuple(dlc) if isinstance(dlc, Iterable) else (dlc, )
+        self.steam = steam_achievement
     
     @property
     def unlocked(self):
@@ -41,23 +41,3 @@ class Achievement:
             else:
                 raise ValueError("Unlocks not found")
     
-    
-
-class RORobject:
-    
-    # immutable
-    def __init__(self, name: str, defname: str, description: str, unlock: Achievement) -> None:
-        self.__name = name
-        self.__defname = defname
-        self.__description = description
-        self.__unlock = unlock
-    
-    @property
-    def name(self):
-        return self.__name
-    @property
-    def defname(self):
-        return self.__defname
-    @property
-    def describiton(self):
-        return self.__description

@@ -6,7 +6,7 @@ class OpenItemsCommand(Command):
     name = "open"
     description = "Open artifact details. Takes artifact name as argument."
     
-    def _arguments(self):
+    def _arguments(self) -> Completion:
         return {'artifact': {i: None for i in LIST_OF_ARTIFACTS},
                 'item': None,
                 'equipment': None,
@@ -31,7 +31,7 @@ class ListItemsCommand(Command):
     name = "list"
     description = "List all objects."
     
-    def _arguments(self):
+    def _arguments(self) -> Completion:
         return {'artifact': None,
                 'item': None,
                 'equipment': None,

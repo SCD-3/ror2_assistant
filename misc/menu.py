@@ -20,13 +20,12 @@ class Command:
     description: str = ""
     description_long: str = ""
     
-    def _argument(self):
+    def _arguments(self) -> Completion:
         return None
     
-    @final
     @property
-    def arguments(self) -> Completion:
-        return self._argument()
+    def arguments(self):
+        return self._arguments()
     
     def run(self, *args) -> Any:
         pass
@@ -40,7 +39,8 @@ class Menu:
         
         self.title = self.__prepare_title(title)
         self.description = description
-        self.options =  [HelpCommand(self)] + list(options)
+        self.options =  [temp := HelpCommand(self)] + list(options)
+        print(temp.arguments)
     
     @property
     def options_names(self):
@@ -57,9 +57,8 @@ class Menu:
     
     def display_title(self):
         print(self.title)
-        if self.description:
-            print()
-            print(self.description)
+        print()
+        print(self.description)
         rprint("Type '[yellow]help[/yellow]' for help")
     
     def prompt(self):
@@ -98,7 +97,7 @@ class HelpCommand(Command):
     def __init__(self, menu: Menu) -> None:
         self.__menu = menu
     
-    def _arguments(self):
+    def _arguments(self) -> Completion:
         return {i: None for i in self.__menu.options_names.keys()}
     
     def run(self, *args) -> Any:
@@ -109,7 +108,6 @@ class HelpCommand(Command):
             if args[0] not in self.__menu.options_names:
                 raise ArgumentError(f"Invalid command as argument: {args[0]}")
             print(self.__menu.options_names[args[0]].description_long)
-
 
 
 class ArgumentError(Exception):

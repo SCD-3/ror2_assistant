@@ -1,5 +1,5 @@
 from typing import Literal
-from misc.menu import Command
+from misc.menu import Command, COMMON_STYLE
 
 from InquirerPy import inquirer
 from InquirerPy.base.control import Choice
@@ -37,7 +37,7 @@ class SaveFileCommand(Command):
                 Choice(None, 'Exit')
             ],
             default='read' if params["save_file_path"] else 'set',
-            qmark='>',amark='>'
+            **COMMON_STYLE # type: ignore
         ).execute()
         
         match act:
@@ -48,14 +48,14 @@ class SaveFileCommand(Command):
                             message="Enter your savefile:",
                             default=home_path,
                             validate=PathValidator(is_file=True, message="Input is not a file"),
-                            qmark='>',amark='>'
+                            **COMMON_STYLE # type: ignore
                             ).execute()
         
             case 'read':
                 print(params["save_file_path"])
             
             case 'reset':
-                proceed = inquirer.confirm(message="Are you sure?", default=False, qmark='>',amark='>').execute()
+                proceed = inquirer.confirm(message="Are you sure?", default=False, **COMMON_STYLE).execute() # type: ignore
                 if proceed:
                     params["save_file_path"] = None
                     print("Save file path has been removed.")
