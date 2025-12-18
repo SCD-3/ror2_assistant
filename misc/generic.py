@@ -18,7 +18,7 @@ class ExitCommand(Command):
     name = "exit"
     description = "Exit the application"
     
-    def __call__(self, *args):
+    def run(self, *args):
         exit(0)
 
 class SaveFileCommand(Command):
@@ -26,7 +26,7 @@ class SaveFileCommand(Command):
     name = "savepath"
     description = "Open menu for save file managment"
     
-    def __call__(self, *args):
+    def run(self, *args):
         act = inquirer.select(
             message="Select an action:",
             choices=[

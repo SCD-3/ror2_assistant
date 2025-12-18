@@ -35,7 +35,7 @@ class SetCoinsCommand(Command):
     name = "lunar"
     description = "Set the number of Lunar Coins. Leave empty for max coins."
     
-    def __call__(self, *args):
+    def run(self, *args):
         if len(args) == 0:
             coins = MAX_COINS
         else:
