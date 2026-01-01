@@ -1,4 +1,4 @@
-from typing import Any, final
+from typing import Any, Literal
 from pyfiglet import Figlet
 from InquirerPy import inquirer
 from rich import print as rprint
@@ -12,20 +12,17 @@ def clear_console():
 
 type Completion = dict[str, Completion|None]|None
 
+COMMON_STYLE: dict[Literal['qmark', 'amark'], str]
 COMMON_STYLE = {'qmark': '>', 'amark': '>'}
 
 class Command:
     
-    name: str = ""
-    description: str = ""
-    description_long: str = ""
+    name: str
+    description: str = "PLACEHOLDER"
+    description_long: str = "PLACEHOLDER"
     
-    def _arguments(self) -> Completion:
+    def arguments(self) -> Completion:
         return None
-    
-    @property
-    def arguments(self):
-        return self._arguments()
     
     def run(self, *args) -> Any:
         pass
@@ -39,9 +36,18 @@ class Menu:
         
         self.title = self.__prepare_title(title)
         self.description = description
-        self.options =  [temp := HelpCommand(self)] + list(options)
-        print(temp.arguments)
+        self.__help = HelpCommand(self)
+        self.__exit = ExitCommand()
+        self.options =  options
+
     
+    @property
+    def options(self):
+        return (self.__help,) + self.__options + (self.__exit,)
+    @options.setter
+    def options(self, val):
+        self.__options = val
+
     @property
     def options_names(self):
         return {option.name: option for option in self.options}
@@ -64,8 +70,8 @@ class Menu:
     def prompt(self):
         print()
         res: str = inquirer.text(message="", 
-                            completer=NestedCompleter.from_nested_dict({cmd.name: cmd.arguments for cmd in self.options}),
-                            **COMMON_STYLE).execute() # type: ignore
+                            completer=NestedCompleter.from_nested_dict({cmd.name: cmd.arguments() for cmd in self.options}),
+                            **COMMON_STYLE).execute()
         res_args = Menu.__separate_arguments(res)
         return res_args
 
@@ -85,8 +91,27 @@ class Menu:
                 print(err)
             except Exception as err:
                 print(f"{err.__class__.__name__}: {err}")
-            
     
+    def run_main(self):
+        try:
+            self.run()
+        except ExitMenu:
+            exit(1)
+    
+    def run_from(self):
+        try:
+            self.run()
+        except ExitMenu:
+            pass
+
+
+class ExitCommand(Command):
+    
+    name = "exit"
+    description = "Exit the application"
+    
+    def run(self, *args):
+        raise ExitMenu
     
 class HelpCommand(Command):
     
@@ -97,7 +122,7 @@ class HelpCommand(Command):
     def __init__(self, menu: Menu) -> None:
         self.__menu = menu
     
-    def _arguments(self) -> Completion:
+    def arguments(self):
         return {i: None for i in self.__menu.options_names.keys()}
     
     def run(self, *args) -> Any:
@@ -112,3 +137,6 @@ class HelpCommand(Command):
 
 class ArgumentError(Exception):
     """Invalid or missing arguments for a command."""
+
+class ExitMenu(BaseException):
+    """Exit curient menu."""

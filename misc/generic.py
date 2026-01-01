@@ -13,14 +13,6 @@ params = {
     "save_file_path": None
 }
 
-class ExitCommand(Command):
-    
-    name = "exit"
-    description = "Exit the application"
-    
-    def run(self, *args):
-        exit(0)
-
 class SaveFileCommand(Command):
     
     name = "savepath"
@@ -37,7 +29,7 @@ class SaveFileCommand(Command):
                 Choice(None, 'Exit')
             ],
             default='read' if params["save_file_path"] else 'set',
-            **COMMON_STYLE # type: ignore
+            **COMMON_STYLE
         ).execute()
         
         match act:
@@ -48,7 +40,7 @@ class SaveFileCommand(Command):
                             message="Enter your savefile:",
                             default=home_path,
                             validate=PathValidator(is_file=True, message="Input is not a file"),
-                            **COMMON_STYLE # type: ignore
+                            **COMMON_STYLE
                             ).execute()
         
             case 'read':
