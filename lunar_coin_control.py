@@ -1,5 +1,5 @@
 import xml.etree.ElementTree as ET
-from misc.menu import Command, ArgumentError
+from misc.menu import Command, ArgumentError, console
 from misc.generic import params
 
 MAX_COINS = 2**31 - 1 - 1000
@@ -53,6 +53,6 @@ class SetCoinsCommand(Command):
         
         try:
             set_coins(params["save_file_path"], coins)
-            print(f"Set Lunar Coins to {coins}⊙.")
+            console.print(f"Set Lunar Coins to {coins}⊙.")
         except Exception as e:
-            print(f"Error setting Lunar Coins: {e}")
+            console.print(f"Error setting Lunar Coins: {e}")

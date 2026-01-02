@@ -1,5 +1,5 @@
 from typing import Literal
-from misc.menu import Command, COMMON_STYLE
+from misc.menu import Command, COMMON_STYLE, console
 
 from InquirerPy import inquirer
 from InquirerPy.base.control import Choice
@@ -44,10 +44,10 @@ class SaveFileCommand(Command):
                             ).execute()
         
             case 'read':
-                print(params["save_file_path"])
+                console.print(params["save_file_path"])
             
             case 'reset':
                 proceed = inquirer.confirm(message="Are you sure?", default=False, **COMMON_STYLE).execute() # type: ignore
                 if proceed:
                     params["save_file_path"] = None
-                    print("Save file path has been removed.")
+                    console.print("Save file path has been removed.")

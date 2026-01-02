@@ -1,7 +1,7 @@
 from typing import Any, Literal
 from pyfiglet import Figlet
 from InquirerPy import inquirer
-from rich import print as rprint
+from rich.console import Console
 from prompt_toolkit.completion import NestedCompleter
 import re as regex
 import os
@@ -18,14 +18,16 @@ type Completion = dict[str, Completion|None]|None
 COMMON_STYLE: dict[Literal['qmark', 'amark'], str]
 COMMON_STYLE = {'qmark': '>', 'amark': '>'}
 
+console = Console(highlight=False)
+
 class Command:
     """
     Base class for all commands.
     """
 
     name: str
-    description: str = "PLACEHOLDER"
-    description_long: str = "PLACEHOLDER"
+    description: str = "[red]PLACEHOLDER[/red]"
+    description_long: str = "[red]PLACEHOLDER[/red]"
     
     def arguments(self) -> Completion:
         return None
@@ -71,7 +73,7 @@ class Menu:
         """
 
         figlet = Figlet(font="slant")
-        return figlet.renderText(title)
+        return str(figlet.renderText(title))
     
     @staticmethod
     def __separate_arguments(t: str):
@@ -87,17 +89,17 @@ class Menu:
         Display the menu title and description.
         """
 
-        print(self.title)
-        print()
-        print(self.description)
-        rprint("Type '[yellow]help[/yellow]' for help")
+        console.print(self.title)
+        console.print()
+        console.print(self.description)
+        console.print("Type [green]'[yellow]help[/yellow]'[/green] for help")
     
     def prompt(self):
         """
         Prompt the user for a command.
         """
 
-        print()
+        console.print()
         res: str = inquirer.text(message="", 
                             completer=NestedCompleter.from_nested_dict({cmd.name: cmd.arguments() for cmd in self.options}),
                             **COMMON_STYLE).execute()
@@ -110,7 +112,7 @@ class Menu:
         """
 
         if cmd[0] not in self.options_names:
-            raise ArgumentError(f"Invalid command: {cmd[0]}")
+            raise ArgumentError(f"Invalid command: [magenta]{cmd[0]}[/]")
         self.options_names[cmd[0]].run(*cmd[1:])
     
     def run(self):
@@ -122,12 +124,13 @@ class Menu:
         self.display_title()
         while True:
             res = self.prompt()
-            try:
-                self.execute(res)
-            except ArgumentError as err:
-                print(err)
-            except Exception as err:
-                print(f"{err.__class__.__name__}: {err}")
+            if res:
+                try:
+                    self.execute(res)
+                except ArgumentError as err:
+                    console.print(str(err))
+                except Exception as err:
+                    console.print(f"{err.__class__.__name__}: {str(err)}")
     
     def run_main(self):
         """
@@ -172,11 +175,11 @@ class HelpCommand(Command):
     def run(self, *args) -> Any:
         if len(args) == 0:
             for command in self.__menu.options:
-                print(f"{command.name} - {command.description}")
+                console.print(f"{command.name} - {command.description}")
         else:
             if args[0] not in self.__menu.options_names:
-                raise ArgumentError(f"Invalid command as argument: {args[0]}")
-            print(self.__menu.options_names[args[0]].description_long)
+                raise ArgumentError(f"Invalid command as argument: [magenta]{args[0]}[/]")
+            console.print(self.__menu.options_names[args[0]].description_long)
 
 
 class ArgumentError(Exception):

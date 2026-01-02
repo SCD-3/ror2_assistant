@@ -1,4 +1,4 @@
-from misc.menu import Command, ArgumentError, Completion
+from misc.menu import Command, ArgumentError, Completion, console
 from items.artifacts.artifacts_checklist import LIST_OF_ARTIFACTS
 
 class OpenItemsCommand(Command):
@@ -43,7 +43,7 @@ class ListItemsCommand(Command):
                 }
     
     def run(self, *args) -> None:
-        print("Available Artifacts:")
+        console.print("Available Artifacts:")
         for artifact in LIST_OF_ARTIFACTS.values():
             status = "\033[32m✓\033[0m" if artifact.unlocked else "\033[31m✗\033[0m"
-            print(f"- {artifact.full_name.ljust(30)} {status}")
+            console.print(f"- {artifact.full_name.ljust(30)} {status}")

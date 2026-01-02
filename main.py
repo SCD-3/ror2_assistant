@@ -8,7 +8,7 @@ if __name__ == "__main__":
 
     
     main_menu = Menu("Risk of Rain 2\nASSISTANT",
-                     "Assistant to game Risk of Rain 2",
+                     "Assistant to game [#C4CF4E]Risk of Rain 2",
                      #OpenItemsCommand(),
                      #ListItemsCommand(), 
                      SetCoinsCommand(),
