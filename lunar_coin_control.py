@@ -5,6 +5,10 @@ from misc.generic import params
 MAX_COINS = 2**31 - 1 - 1000
 
 def set_coins(xml_path, coins):
+    """
+    Set the number of coins in the XML file.
+    """
+
     if not isinstance(coins, int):
         raise TypeError(f"Coins value must be of type int, not {type(coins).__name__}")
     
@@ -19,6 +23,9 @@ def set_coins(xml_path, coins):
         raise ValueError("No 'coins' element found in the XML file.")
 
 def get_coins(xml_path):
+    """
+    Get the number of coins from the XML file.
+    """
     tree = ET.parse(xml_path)
     root = tree.getroot()
     
