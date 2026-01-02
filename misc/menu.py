@@ -6,6 +6,8 @@ from prompt_toolkit.completion import NestedCompleter
 import re as regex
 import os
 
+
+
 def clear_console():
     """
     Clear the console screen.
@@ -32,7 +34,7 @@ class Command:
     def arguments(self) -> Completion:
         return None
     
-    def run(self, *args) -> Any:
+    def run(self, *args) -> None:
         ...
 
 

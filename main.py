@@ -1,6 +1,8 @@
 from misc.menu import Menu
 from commands import *
 
+from devmode.dev import EnableDevCommand
+
 
 if __name__ == "__main__":
     
@@ -12,7 +14,8 @@ if __name__ == "__main__":
                      #OpenItemsCommand(),
                      #ListItemsCommand(), 
                      SetCoinsCommand(),
-                     SaveFileCommand()
+                     SaveFileCommand(),
+                     EnableDevCommand()
                      )
 
     main_menu.run_main()
