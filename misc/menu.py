@@ -6,7 +6,7 @@ from prompt_toolkit.completion import NestedCompleter
 import re as regex
 import os
 
-
+#TODO move stuffs like console to separate file
 
 def clear_console():
     """
@@ -132,7 +132,7 @@ class Menu:
                 except ArgumentError as err:
                     console.print(str(err))
                 except Exception as err:
-                    console.print(f"{err.__class__.__name__}: {str(err)}")
+                    console.print(f"[magenta]{err.__class__.__name__}[/magenta]: {err}")
     
     def run_main(self):
         """
