@@ -1,11 +1,11 @@
 import xml.etree.ElementTree as ET
 from misc.menu import Command, ArgumentError
 from misc.const import *
-from misc.generic import params
+from misc.generic import SAVEPATH
 
 MAX_COINS = 2**31 - 1 - 1000
 
-def set_coins(xml_path, coins):
+def set_coins(xml_path: str, coins: int):
     """
     Set the number of coins in the XML file.
     """
@@ -23,7 +23,7 @@ def set_coins(xml_path, coins):
     else:
         raise ValueError("No 'coins' element found in the XML file.")
 
-def get_coins(xml_path):
+def get_coins(xml_path: str):
     """
     Get the number of coins from the XML file.
     """
@@ -53,7 +53,7 @@ class SetCoinsCommand(Command):
                 raise ArgumentError("Lunar Coins value must be an integer.")
         
         try:
-            set_coins(params["save_file_path"], coins)
+            set_coins(SAVEPATH, coins)
             console.print(f"Set Lunar Coins to {coins}⊙.")
         except Exception as e:
             console.print(f"Error setting Lunar Coins: {e}")
