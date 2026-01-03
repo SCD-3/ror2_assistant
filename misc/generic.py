@@ -1,5 +1,6 @@
 from typing import Literal
-from misc.menu import Command, COMMON_STYLE, console
+from misc.menu import Command
+from misc.const import *
 
 from InquirerPy import inquirer
 from InquirerPy.base.control import Choice

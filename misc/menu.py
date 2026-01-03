@@ -1,7 +1,8 @@
-from typing import Any, Literal
+from misc.const import *
+
+from typing import Any
 from pyfiglet import Figlet
 from InquirerPy import inquirer
-from rich.console import Console
 from prompt_toolkit.completion import NestedCompleter
 import re as regex
 import os
@@ -16,11 +17,6 @@ def clear_console():
     os.system('cls' if os.name == 'nt' else 'clear')
 
 type Completion = dict[str, Completion|None]|None
-
-COMMON_STYLE: dict[Literal['qmark', 'amark'], str]
-COMMON_STYLE = {'qmark': '>', 'amark': '>'}
-
-console = Console(highlight=False)
 
 class Command:
     """
