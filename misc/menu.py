@@ -89,7 +89,7 @@ class Menu:
         console.print(self.title)
         console.print()
         console.print(self.description)
-        console.print("Type [green]'[yellow]help[/yellow]'[/green] for help")
+        console.print("Type 'help' for help")
     
     def prompt(self):
         """
