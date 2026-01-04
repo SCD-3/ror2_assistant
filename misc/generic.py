@@ -39,7 +39,7 @@ class SaveFile:
         return self.exists
     
     def __str__(self):
-        return self.path
+        return str(self.path)
 
 SAVEPATH = SaveFile()
 

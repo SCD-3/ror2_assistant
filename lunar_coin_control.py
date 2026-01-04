@@ -44,16 +44,19 @@ class SetCoinsCommand(Command):
     description = "Set the number of Lunar Coins. Leave empty for max coins."
     
     def run(self, *args):
-        if len(args) == 0:
-            coins = MAX_COINS
-        else:
+        if SAVEPATH:
+            if len(args) == 0:
+                coins = MAX_COINS
+            else:
+                try:
+                    coins = int(args[0])
+                except ValueError:
+                    raise ArgumentError("Lunar Coins value must be an integer.")
+            
             try:
-                coins = int(args[0])
-            except ValueError:
-                raise ArgumentError("Lunar Coins value must be an integer.")
-        
-        try:
-            set_coins(SAVEPATH, coins)
-            console.print(f"Set Lunar Coins to {coins}⊙.")
-        except Exception as e:
-            console.print(f"Error setting Lunar Coins: {e}")
+                set_coins(str(SAVEPATH), coins)
+                console.print(f"Set Lunar Coins to {coins}⊙.")
+            except Exception as e:
+                console.print(f"Error setting Lunar Coins: {e}")
+        else:
+            raise ValueError("Save path not given. Use 'savepath' command")

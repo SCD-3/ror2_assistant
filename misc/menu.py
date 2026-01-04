@@ -1,13 +1,11 @@
 from misc.const import *
 
-from typing import Any
+from typing import Any, Tuple, Dict
 from pyfiglet import Figlet
 from InquirerPy import inquirer
 from prompt_toolkit.completion import NestedCompleter
 import re as regex
 import os
-
-#TODO move stuffs like console to separate file
 
 def clear_console():
     """
@@ -16,7 +14,7 @@ def clear_console():
 
     os.system('cls' if os.name == 'nt' else 'clear')
 
-type Completion = dict[str, Completion|None]|None
+type Completion = dict[str, Completion]|None
 
 class Command:
     """
@@ -52,17 +50,18 @@ class Menu:
         self.__help = HelpCommand(self)
         self.__exit = ExitCommand()
         self.options =  options
+    
 
     
     @property
-    def options(self):
+    def options(self) -> Tuple[Command, ...]:
         return (self.__help,) + self.__options + (self.__exit,)
     @options.setter
-    def options(self, val):
+    def options(self, val: Tuple[Command, ...]):
         self.__options = val
 
     @property
-    def options_names(self):
+    def options_names(self) -> Dict[str, Command]:
         return {option.name: option for option in self.options}
     
     def __prepare_title(self, title: str) -> str:
@@ -167,7 +166,7 @@ class HelpCommand(Command):
     def __init__(self, menu: Menu) -> None:
         self.__menu = menu
     
-    def arguments(self):
+    def arguments(self) -> Completion:
         return {i: None for i in self.__menu.options_names.keys()}
     
     def run(self, *args) -> Any:

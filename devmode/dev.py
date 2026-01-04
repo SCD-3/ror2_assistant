@@ -5,4 +5,4 @@ class EnableDevCommand(Command):
     description = "Open developer mode for advanced control."
 
     def run(self, *args):
-        raise NotImplemented
+        raise NotImplementedError
