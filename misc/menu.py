@@ -28,7 +28,7 @@ class Command:
     def arguments(self) -> Completion:
         return None
     
-    def run(self, *args) -> None:
+    def run(self, *args: str) -> None:
         ...
 
 
@@ -136,7 +136,7 @@ class Menu:
         try:
             self.run()
         except ExitMenu:
-            exit(1)
+            exit()
     
     def run_from(self, child: 'Menu'):
         """
