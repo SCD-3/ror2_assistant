@@ -65,17 +65,27 @@ class Menu:
         return {option.name: option for option in self.options}
     
     def __prepare_title(self, title: str) -> str:
-        """
-        Prepare the title using figlet.
+        """Prepare the title using figlet
+
+        Args:
+            title (str): Title text
+
+        Returns:
+            str: Title ASCII art
         """
 
         figlet = Figlet(font="slant")
         return str(figlet.renderText(title))
     
     @staticmethod
-    def __separate_arguments(t: str):
-        """
-        Separate arguments in a command string.
+    def __separate_arguments(t: str) -> list[str]:
+        """Separate arguments in a command string.
+
+        Args:
+            t (str): Raw string to be separated.
+
+        Returns:
+            list[str]: Separated arguments.
         """
 
         p: list[str] = regex.findall(r'"[^"]*"|\S+', t)
@@ -140,13 +150,41 @@ class Menu:
     
     def run_from(self, child: 'Menu'):
         """
-        Run a child menu from the current menu.
+        Run a child menu from the currient menu.
+
+        Args:
+            child (Menu): Menu object to be used
         """
         try:
             child.run()
         except ExitMenu:
             clear_console()
             self.display_title()
+            
+
+
+class MenuOpener(Command):
+
+    target_menu: Menu
+    
+    def __init__(self, menu: Menu) -> None:
+        self.menu = menu
+    
+    def run(self, *args):
+        FLAG_RUN_AS_MAIN = False
+        if len(args) >= 1:
+            if args[0] == "asmain":
+                FLAG_RUN_AS_MAIN = True
+            else:
+                raise ArgumentError("Invalid argument given. Accepts only 'asmain'.")
+        
+        if FLAG_RUN_AS_MAIN:
+            self.target_menu.run_main()
+        else:
+            self.menu.run_from(self.target_menu)
+    
+    def arguments(self) -> Completion:
+        return {"asmain": None}
 
 
 class ExitCommand(Command):
@@ -154,7 +192,15 @@ class ExitCommand(Command):
     name = "exit"
     description = "Exit the application"
     
+    def arguments(self) -> Completion:
+        return {'all': None}
+    
     def run(self, *args):
+        if len(args) >= 1:
+            if args[0] == "all":
+                exit()
+            else:
+                raise ArgumentError("Invalid argument given. Accepts only 'all'.")
         raise ExitMenu
     
 class HelpCommand(Command):

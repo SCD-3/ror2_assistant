@@ -1,3 +1,4 @@
 InquirerPy
 pyfiglet
 rich
+requests

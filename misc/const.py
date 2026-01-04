@@ -7,16 +7,19 @@ from rich.theme import Theme
 COMMON_STYLE: dict[Literal['qmark', 'amark'], str]
 COMMON_STYLE = {'qmark': '>', 'amark': '>'}
 
-class QuoteHighlighter(RegexHighlighter):
-    base_style = "quote."
+class Highlighter(RegexHighlighter):
+    base_style = "highlight."
     highlights = [
         r"(?P<quote>')",
         r"(?P<content>(?<=')[^']*(?='))",
+        r"(?P<err>(ERROR))"
     ]
 
 theme = Theme({
-    "quote.quote": "green",
-    "quote.content": "yellow",
+    "highlight.quote": "green",
+    "highlight.content": "yellow",
+    
+    "highlight.err": "red bold"
 })
 
-console = Console(theme=theme, highlighter=QuoteHighlighter())
+console = Console(theme=theme, highlighter=Highlighter())

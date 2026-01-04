@@ -78,7 +78,7 @@ class SaveFileCommand(Command):
                 console.print(SAVEPATH)
             
             case 'reset':
-                proceed = inquirer.confirm(message="Are you sure?", default=False, **COMMON_STYLE).execute() # type: ignore
+                proceed: bool = inquirer.confirm(message="Are you sure?", default=False, **COMMON_STYLE).execute()
                 if proceed:
                     SAVEPATH.update_path()
                     console.print("Save file path has been removed.")
