@@ -1,6 +1,6 @@
 from misc.const import *
 
-from typing import Any, Tuple, Dict
+from typing import Any, Tuple, Dict, final
 from pyfiglet import Figlet
 from InquirerPy import inquirer
 from prompt_toolkit.completion import NestedCompleter
@@ -32,7 +32,7 @@ class Command:
         ...
 
 
-
+@final
 class Menu:
     """
     Class representing a console menu.
@@ -42,20 +42,24 @@ class Menu:
         options (tuple[Command, ...]): The available commands in the menu.
     """
 
+    menu_stack: list["Menu"] = []
+    
     def __init__(self, title: str, description: str, /, *options: Command):
         clear_console()
         
+        self.small_title = title
         self.title = self.__prepare_title(title)
         self.description = description
-        self.__help = HelpCommand(self)
-        self.__exit = ExitCommand()
+        # self.__help = HelpCommand()
+        # self.__exit = ExitCommand()
+        # self.__cd   = CurrientMenuCommand()
         self.options =  options
     
 
     
     @property
     def options(self) -> Tuple[Command, ...]:
-        return (self.__help,) + self.__options + (self.__exit,)
+        return (HelpCommand(), CurrientMenuCommand()) + self.__options + (ExitCommand(),)
     @options.setter
     def options(self, val: Tuple[Command, ...]):
         self.__options = val
@@ -89,7 +93,7 @@ class Menu:
         """
 
         p: list[str] = regex.findall(r'"[^"]*"|\S+', t)
-        return [i.strip() for i in p]
+        return [i.strip().lower() for i in p]
     
     def display_title(self):
         """
@@ -120,7 +124,10 @@ class Menu:
 
         if cmd[0] not in self.options_names:
             raise ArgumentError(f"Invalid command: [magenta]{cmd[0]}[/]")
-        self.options_names[cmd[0]].run(*cmd[1:])
+        try:
+            self.options_names[cmd[0]].run(*cmd[1:])
+        except KeyboardInterrupt:
+            console.print("[magenta bold]KeyboardInterrupt[/magenta bold]")
     
     def run(self):
         """
@@ -137,16 +144,14 @@ class Menu:
                 except ArgumentError as err:
                     console.print(str(err))
                 except Exception as err:
-                    console.print(f"[magenta]{err.__class__.__name__}[/magenta]: {err}")
+                    console.print(f"[magenta bold]{err.__class__.__name__}[/magenta bold]: {err}")
     
     def run_main(self):
         """
         Run the main menu loop.
         """
-        try:
-            self.run()
-        except ExitMenu:
-            exit()
+        Menu.menu_stack = [self]
+        self.run()
     
     def run_from(self, child: 'Menu'):
         """
@@ -155,6 +160,7 @@ class Menu:
         Args:
             child (Menu): Menu object to be used
         """
+        Menu.menu_stack.append(child)
         try:
             child.run()
         except ExitMenu:
@@ -165,12 +171,10 @@ class Menu:
 
 class MenuOpener(Command):
 
-    target_menu: Menu
-    
-    def __init__(self, menu: Menu) -> None:
-        self.menu = menu
+    child_menu: Menu
     
     def run(self, *args):
+        parent_menu = Menu.menu_stack[-1]
         FLAG_RUN_AS_MAIN = False
         if len(args) >= 1:
             if args[0] == "asmain":
@@ -179,9 +183,9 @@ class MenuOpener(Command):
                 raise ArgumentError("Invalid argument given. Accepts only 'asmain'.")
         
         if FLAG_RUN_AS_MAIN:
-            self.target_menu.run_main()
+            self.child_menu.run_main()
         else:
-            self.menu.run_from(self.target_menu)
+            parent_menu.run_from(self.child_menu)
     
     def arguments(self) -> Completion:
         return {"asmain": None}
@@ -190,7 +194,7 @@ class MenuOpener(Command):
 class ExitCommand(Command):
     
     name = "exit"
-    description = "Exit the application"
+    description = "Exit currient menu"
     
     def arguments(self) -> Completion:
         return {'all': None}
@@ -201,7 +205,11 @@ class ExitCommand(Command):
                 exit()
             else:
                 raise ArgumentError("Invalid argument given. Accepts only 'all'.")
-        raise ExitMenu
+        if len(Menu.menu_stack) > 1:
+            Menu.menu_stack.pop()
+            raise ExitMenu
+        else:
+            exit()
     
 class HelpCommand(Command):
     
@@ -209,8 +217,8 @@ class HelpCommand(Command):
     description = "Opens help menu"
     description_long = """help [<command>] - Opens help menu. If [<command>] is given, show detailed description about given command"""
     
-    def __init__(self, menu: Menu) -> None:
-        self.__menu = menu
+    def __init__(self) -> None:
+        self.__menu = Menu.menu_stack[-1]
     
     def arguments(self) -> Completion:
         return {i: None for i in self.__menu.options_names.keys()}
@@ -224,6 +232,28 @@ class HelpCommand(Command):
                 raise ArgumentError(f"Invalid command as argument: [magenta]{args[0]}[/]")
             console.print(self.__menu.options_names[args[0]].description_long)
 
+class CurrientMenuCommand(Command):
+    
+    name = "cd"
+    description = "Check currient menu"
+    
+    def arguments(self) -> Completion:
+        return {"stack": {"noname": None}, "noname": {"stack": None}}
+    
+    def run(self, *args: str) -> None:
+        noname = "noname" in args[:2]
+        stack  = "stack" in args[:2]
+
+        if stack:
+            console.print(*reversed([i if noname else i.small_title for i in Menu.menu_stack]), sep='\n'+'='*20+'\n')
+        else:
+            menu = Menu.menu_stack[-1]
+            if noname:
+                console.print(menu)
+            else:
+                console.print(menu.small_title)
+                console.print()
+                console.print(menu.description)
 
 class ArgumentError(Exception):
     """Invalid or missing arguments for a command."""

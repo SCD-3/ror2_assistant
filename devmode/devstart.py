@@ -9,4 +9,4 @@ dev_menu = Menu("DEVMODE",
 class EnableDevCommand(MenuOpener):
     name = "devmode"
     description = "Open developer mode for advanced control."
-    target_menu = dev_menu
+    child_menu = dev_menu

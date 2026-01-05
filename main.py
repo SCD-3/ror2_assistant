@@ -12,7 +12,7 @@ if __name__ == "__main__":
     main_menu.options = (
         SetCoinsCommand(),
         SaveFileCommand(),
-        EnableDevCommand(main_menu)
+        EnableDevCommand()
         )
                      
 
