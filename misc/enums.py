@@ -19,3 +19,5 @@ class Stacking(Flag):
     Reciprocal = auto()
     Exponential = auto()
     Special = auto()
+
+ENUMS = (Rarity, Stacking)
