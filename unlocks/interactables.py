@@ -1,0 +1,2 @@
+class Interactable:
+    pass #TODO

@@ -1,2 +1,1 @@
-from devmode.api_manager import APILinkCommand
 from devmode.enum_command import SeeEnumsCommand

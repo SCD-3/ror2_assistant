@@ -4,7 +4,6 @@ from devmode.dev_commands import *
 
 dev_menu = Menu("DEVMODE",
                 "Developer menu for advanced functionality",
-                APILinkCommand(),
                 SeeEnumsCommand())
 
 class EnableDevCommand(MenuOpener):

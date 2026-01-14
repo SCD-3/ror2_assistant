@@ -1,23 +1,32 @@
-from enum import Flag, auto
+from enum import StrEnum
 
-class Rarity(Flag):
+class Rarity(StrEnum):
 
-    Common = auto()
-    Uncommon = auto()
-    Legendary = auto()
-    Boss = auto()
-    Lunar = auto()
-    Void = auto()
-    Meal = auto()
-    Equipment = auto()
-    Elite = auto()
+    Common = 'Common'
+    Uncommon = 'Uncommon'
+    Legendary = 'Legendary'
+    Boss = 'Boss'
+    Planet = 'Planet'
+    Lunar = 'Lunar'
+    Void = 'Void'
+    Meal = 'Meal'
+    Equipment = 'Equipment'
+    Elite = 'Elite'
+    Used = 'Used'
 
-class Stacking(Flag):
+class Stacking(StrEnum):
 
-    Linear = auto()
-    Hyperbolic = auto()
-    Reciprocal = auto()
-    Exponential = auto()
-    Special = auto()
+    Linear = 'Linear'
+    Hyperbolic = 'Hyperbolic'
+    Reciprocal = 'Reciprocal'
+    Exponential = 'Exponential'
+    Special = 'Special'
 
-ENUMS = (Rarity, Stacking)
+class DLC(StrEnum):
+    
+    RiskOfRain2 = 'Risk Of Rain 2'
+    SurvivorsOfTheVoid = 'Survivors of the Void'
+    SeekersOfTheStorm = 'Seekers of the Storm'
+    AlloyedCollective = 'Alloyed Collective'
+
+ENUMS = (Rarity, Stacking, DLC)
