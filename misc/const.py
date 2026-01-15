@@ -12,7 +12,8 @@ class Highlighter(RegexHighlighter):
     highlights = [
         r"(?P<quote>')",
         r"(?P<content>(?<=')[^']*(?='))",
-        r"(?P<err>(ERROR))"
+        r"(?P<err>(ERROR))",
+        r"(?P<err>(PLACEHOLDER))"
     ]
 
 theme = Theme({

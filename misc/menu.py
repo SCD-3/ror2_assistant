@@ -22,8 +22,8 @@ class Command:
     """
 
     name: str
-    description: str = "[red]PLACEHOLDER[/red]"
-    description_long: str = "[red]PLACEHOLDER[/red]"
+    description: str = "PLACEHOLDER"
+    description_long: str = "PLACEHOLDER"
     
     def arguments(self) -> Completion:
         return None

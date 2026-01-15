@@ -1,7 +1,6 @@
 import xml.etree.ElementTree as ET
 from misc.menu import Command, ArgumentError
 from misc.const import *
-from misc.generic import SAVEPATH
 
 MAX_COINS = 2**31 - 1 - 1000
 
