@@ -50,9 +50,6 @@ class Menu:
         self.small_title = title
         self.title = self.__prepare_title(title)
         self.description = description
-        # self.__help = HelpCommand()
-        # self.__exit = ExitCommand()
-        # self.__cd   = CurrientMenuCommand()
         self.options =  options
     
 

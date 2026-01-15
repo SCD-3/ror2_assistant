@@ -1,2 +1,0 @@
-class Ally:
-    pass #TODO

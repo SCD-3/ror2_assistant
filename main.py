@@ -15,5 +15,4 @@ if __name__ == "__main__":
         EnableDevCommand()
         )
 
-
     main_menu.run_main()

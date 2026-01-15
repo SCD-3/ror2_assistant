@@ -8,6 +8,6 @@ class SeeEnumsCommand(menu.Command):
         for iid, enum in enumerate(enums.ENUMS):
             const.console.print(f"[#ffaa00]{enum.__name__}")
             for val in enum:
-                const.console.print(' ', val.name)
+                const.console.print(' ', f"{val.name} {' '*(22-len(val.name))}=> {val.value}")
             if iid+1 != len(enums.ENUMS):
                 const.console.print()
