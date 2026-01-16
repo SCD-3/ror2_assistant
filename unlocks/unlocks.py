@@ -1,3 +1,7 @@
+import misc.enums
+
+type Cookable = 'Item|Equipment'
+
 class Ally:
     pass #TODO
 
@@ -43,8 +47,6 @@ class Environment:
 class Interactable:
     pass #TODO
 
-import misc.enums
-
 class Item:
 
     def __init__(self,
@@ -65,8 +67,40 @@ class Item:
         self.corrupts = corrupts
         self.hardcap_at = hardcap_at
 
+class Equipment:
+    
+    def __init__(self,
+                name: str,
+                desc: str,
+                long_desc: str,
+                *,
+                base_cd: int,
+                lunar: bool = False,
+                elite: bool = False,
+                can_activate: bool = True) -> None:
+        
+        self.name = name
+        self.desc = desc
+        self.long_desc = long_desc
+        self.base_cd = base_cd
+        self.rarity = ((misc.enums.Rarity.Lunar,) if lunar else ()) + (misc.enums.Rarity.Equipment,) + ((misc.enums.Rarity.Elite,) if elite else ())
+        self.can_activate = can_activate
+
 class Monster:
     pass #TODO
 
 class Skill:
     pass #TODO
+
+class Recipe:
+    
+    def __init__(self,
+                item1:   Cookable,
+                item2:   Cookable,
+                reasult: Cookable,
+                *,
+                reasult_amount: int = 1) -> None:
+        
+        self.ingredients = (item1, item2)
+        self.reasult = reasult
+        self.reasult_amount = reasult_amount

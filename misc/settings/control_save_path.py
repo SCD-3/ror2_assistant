@@ -22,6 +22,9 @@ if not os.path.exists(CONFIG_PATH):
     json.dump(EMPTY_CONFIG, open(CONFIG_PATH, 'w'))
 JSON_DATA = json.load(open(CONFIG_PATH))
 
+def get_confing():
+    return json.load(open(CONFIG_PATH))
+
 def _update_config_file(j: Any):
     json.dump(j, open(CONFIG_PATH, 'w'))
 

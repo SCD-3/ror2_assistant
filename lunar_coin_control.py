@@ -1,6 +1,8 @@
 import xml.etree.ElementTree as ET
+import os.path
 from misc.menu import Command, ArgumentError
-from misc.const import *
+from misc.const import console
+from misc.settings.control_save_path import get_confing
 
 MAX_COINS = 2**31 - 1 - 1000
 
@@ -43,6 +45,9 @@ class SetCoinsCommand(Command):
     description = "Set the number of Lunar Coins. Leave empty for max coins."
     
     def run(self, *args):
+        CONFIG = get_confing()
+        SAVEPATH = os.path.join(CONFIG['profile_path'], CONFIG['selected_profile'])
+        
         if SAVEPATH:
             if len(args) == 0:
                 coins = MAX_COINS
@@ -58,4 +63,4 @@ class SetCoinsCommand(Command):
             except Exception as e:
                 console.print(f"Error setting Lunar Coins: {e}")
         else:
-            raise ValueError("Save path not given. Use 'savepath' command")
+            raise ValueError("Save path not given.")
