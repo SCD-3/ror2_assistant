@@ -47,4 +47,16 @@ class DLC(StrEnum):
     Alloyed_Collective = auto()
 
 
-ENUMS = (Rarity, Stacking, DLC)
+class SkillSlot(StrEnum):
+
+    @staticmethod
+    def _generate_next_value_(name: str, start: int, count: int, last_values: list[str]) -> str:
+        return _auto(name)
+
+    Passive = auto()
+    Primary = auto()
+    Secondary = auto()
+    Utility = auto()
+    Special = auto()
+
+ENUMS = (Rarity, Stacking, DLC, SkillSlot)
