@@ -25,14 +25,14 @@ _theme = Theme({
     
     "highlight.RCommon": "white",
     "highlight.RUncommon": "green",
-    "highlight.RLegendary": "red",
-    "highlight.RBoss": "yellow",
+    "highlight.RLegendary": "bold red",
+    "highlight.RBoss": "bold yellow",
     "highlight.RPlanet": "yellow",
-    "highlight.RLunar": "blue",
-    "highlight.RVoid": "magenta",
+    "highlight.RLunar": "italic blue",
+    "highlight.RVoid": "italic bold magenta",
     "highlight.RMeal": "#FF5C00",
     "highlight.REquipment": "#FFA500",
-    "highlight.RElite": "#FF5C00",
+    "highlight.RElite": "bold #FF5C00",
     "highlight.RUsed": "dim #808080",
 })
 
