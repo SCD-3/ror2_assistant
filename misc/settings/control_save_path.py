@@ -9,6 +9,7 @@ from InquirerPy.separator import Separator
 from InquirerPy.validator import PathValidator
 
 import misc.const
+from output import console
 from misc.menu import Command
 
 
@@ -65,7 +66,7 @@ class SetProfilePathCommand(Command):
                 JSON_DATA['profile_path'] = new_path
         
             case 'read':
-                misc.const.console.print(JSON_DATA['profile_path'])
+                console.print(JSON_DATA['profile_path'])
             
             case 'reset':
                 proceed: bool = inquirer.confirm(message="Are you sure?", default=False, **misc.const.COMMON_STYLE).execute()

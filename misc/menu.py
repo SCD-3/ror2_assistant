@@ -1,4 +1,5 @@
 from misc.const import *
+from output import console
 
 from typing import Any, Tuple, Dict, final
 from pyfiglet import Figlet

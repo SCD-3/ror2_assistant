@@ -1,7 +1,7 @@
 import xml.etree.ElementTree as ET
 import os.path
 from misc.menu import Command, ArgumentError
-from misc.const import console
+from output import console
 from misc.settings.control_save_path import get_confing
 
 MAX_COINS = 2**31 - 1 - 1000

@@ -1,4 +1,5 @@
-from misc import menu, const, enums
+from misc import menu, enums
+from output import console
 
 class SeeEnumsCommand(menu.Command):
 
@@ -6,8 +7,8 @@ class SeeEnumsCommand(menu.Command):
 
     def run(self, *args):
         for iid, enum in enumerate(enums.ENUMS):
-            const.console.print(f"[#ffaa00]{enum.__name__}")
+            console.print(f"[#ffaa00]{enum.__name__}")
             for val in enum:
-                const.console.print(' ', f"{val.name} {' '*(22-len(val.name))}=> {val.value}")
+                console.print(' ', f"{val.name} {' '*(22-len(val.name))}=> {val.value}")
             if iid+1 != len(enums.ENUMS):
-                const.console.print()
+                console.print()
