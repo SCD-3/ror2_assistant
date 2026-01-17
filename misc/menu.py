@@ -12,7 +12,7 @@ def clear_console():
     Clear the console screen.
     """
 
-    DO_CLEAR = True
+    DO_CLEAR = False
 
     if DO_CLEAR:
         os.system('cls' if os.name == 'nt' else 'clear')
@@ -86,7 +86,7 @@ class Menu:
         """Separate arguments in a command string.
 
         Args:
-            t (str): Raw string to be separated.
+            t (str): 'Raw' string to be separated.
 
         Returns:
             list[str]: Separated arguments.
@@ -97,7 +97,7 @@ class Menu:
 
         t = t.lower().strip()
         sep = True
-        out = ""
+        out: str = "" # this is not a Literal you stupid monkey
         for i in t:
             if i == ' ' and sep:
                 out += '\uE000'
@@ -105,7 +105,7 @@ class Menu:
                 sep = not sep
             else:
                 out += i
-        return out.split('\uE000')
+        return out.split('\uE000') # type: ignore
     
     def display_title(self):
         """

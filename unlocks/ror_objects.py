@@ -1,7 +1,18 @@
 import misc.enums
 
+import json
+import os.path
+
+PATH = os.path.join(os.path.dirname(__file__), 'unlocks_db.json')
+
+type rorObj = 'Ally|Artifact|Challange|Character|Environment|Interactable|Item|Equipment|Monster|Skill|Recipe'
 type Cookable = 'Item|Equipment'
 type Unlockable = 'Item|Character|Skill'
+
+def save_ror_obj(obj: rorObj) -> None:
+    atrs = dir(obj)
+    type_name = type(obj).__name__
+
 
 class Ally:
     
@@ -19,13 +30,15 @@ class Challange:
     
     def __init__(self, 
                 name: str, 
+                defname: str,
                 desc: str,
-                reward: Unlockable = None,
+                reward: Unlockable,
                 *,
                 character: 'None|Character' = None) -> None:
         self.created.append(self)
         
         self.name = name
+        self.defname = defname
         self.desc = desc
         self.reward = reward
         self.character = character
@@ -41,6 +54,7 @@ class Environment:
     
     def __init__(self,
                 name: str,
+                defname: str,
                 title: str,
                 devname: str|tuple[str],
                 *,
@@ -53,6 +67,7 @@ class Environment:
         self.created.append(self)
         
         self.name = name
+        self.defname = defname
         self.title = title
         self.devname = devname
         self.stage = stage
@@ -72,6 +87,7 @@ class Item:
 
     def __init__(self,
                 name: str,
+                defname: str,
                 desc: str,
                 desc_long: str,
                 *, 
@@ -82,6 +98,7 @@ class Item:
         self.created.append(self)
         
         self.name = name
+        self.defname = defname
         self.desc = desc
         self.desc_long = desc_long
         self.scaling = scaling
@@ -95,6 +112,7 @@ class Equipment:
     
     def __init__(self,
                 name: str,
+                defname: str,
                 desc: str,
                 long_desc: str,
                 *,
@@ -105,6 +123,7 @@ class Equipment:
         self.created.append(self)
         
         self.name = name
+        self.defname = defname
         self.desc = desc
         self.long_desc = long_desc
         self.base_cd = base_cd
@@ -133,6 +152,7 @@ class Skill:
         self.created.append(self)
         
         self.name = name
+        self.defname = name.replace(' ', '_')
         self.desc = desc
         self.long_desc = long_desc
         self.character = character
@@ -153,13 +173,14 @@ class Recipe:
                 reasult_amount: int = 1) -> None:
         self.created.append(self)
         
+        self.defname = f"{item1.defname}_AND_{item2.defname}_TO_{reasult.defname}"
         self.ingredients = (item1, item2)
         self.reasult = reasult
         self.reasult_amount = reasult_amount
     
     @classmethod
-    def get_from(cls, ingredient: Cookable) -> tuple['Recipe']:
+    def get_from(cls, ingredient: Cookable) -> tuple['Recipe', ...]:
         return tuple(i for i in cls.created if ingredient in i.ingredients)
     @classmethod
-    def get_for(cls, reasult: Cookable) -> tuple['Recipe']:
+    def get_for(cls, reasult: Cookable) -> tuple['Recipe', ...]:
         return tuple(i for i in cls.created if i.reasult == reasult)
