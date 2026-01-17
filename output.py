@@ -24,7 +24,7 @@ _theme = Theme({
     "highlight.err": "red bold",
     
     "highlight.RCommon": "white",
-    "highlight.RUncommon": "green",
+    "highlight.RUncommon": "#0adf0a",
     "highlight.RLegendary": "bold red",
     "highlight.RBoss": "bold yellow",
     "highlight.RPlanet": "yellow",
