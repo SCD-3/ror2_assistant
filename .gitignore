@@ -4,3 +4,8 @@ temp.py
 */__pycache__
 config.json
 __pycache__
+/misc/settings/__pycache__
+/misc/settings/__pycache__/*.pyc
+*.pyc
+*.cpython
+/misc/settings/__pycache__/control_save_path.cpython-314.pyc
