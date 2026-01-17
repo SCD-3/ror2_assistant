@@ -7,7 +7,7 @@ class PrintCommand(Command):
     description = "Print a message to the console."
     
     def run(self, *args):
-        message = " ".join(args)
+        message = " | ".join(args)
         console.print(message)
 
 dev_menu = Menu("DEVMODE",

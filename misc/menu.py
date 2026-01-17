@@ -5,7 +5,6 @@ from typing import Any, Tuple, Dict, final
 from pyfiglet import Figlet
 from InquirerPy import inquirer
 from prompt_toolkit.completion import NestedCompleter
-import re as regex
 import os
 
 def clear_console():
@@ -13,7 +12,10 @@ def clear_console():
     Clear the console screen.
     """
 
-    os.system('cls' if os.name == 'nt' else 'clear')
+    DO_CLEAR = True
+
+    if DO_CLEAR:
+        os.system('cls' if os.name == 'nt' else 'clear')
 
 type Completion = dict[str, Completion]|None
 
@@ -90,8 +92,20 @@ class Menu:
             list[str]: Separated arguments.
         """
 
-        p: list[str] = regex.findall(r'"[^"]*"|\S+', t)
-        return [i.strip().lower() for i in p]
+        if t.count("'") % 2 != 0:
+            raise ArgumentError("ERROR: Unmatched comma.")
+
+        t = t.lower().strip()
+        sep = True
+        out = ""
+        for i in t:
+            if i == ' ' and sep:
+                out += '\uE000'
+            elif i == "'":
+                sep = not sep
+            else:
+                out += i
+        return out.split('\uE000')
     
     def display_title(self):
         """
@@ -162,6 +176,7 @@ class Menu:
         try:
             child.run()
         except ExitMenu:
+            Menu.menu_stack.pop()
             clear_console()
             self.display_title()
             
@@ -204,7 +219,6 @@ class ExitCommand(Command):
             else:
                 raise ArgumentError("Invalid argument given. Accepts only 'all'.")
         if len(Menu.menu_stack) > 1:
-            Menu.menu_stack.pop()
             raise ExitMenu
         else:
             exit()
