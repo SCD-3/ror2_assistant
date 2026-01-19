@@ -93,8 +93,10 @@ class Item:
                 *, 
                 scaling: dict[str, tuple[int|float, misc.enums.Stacking]],
                 rarity: tuple[misc.enums.Rarity, ...],
-                corrupts: 'None|Item' = None,
-                hardcap_at: None|int = None) -> None:
+                corrupts: 'None|Item|misc.enums.Rarity' = None,
+                hardcap_at: None|int = None,
+                oneuse: bool = False,
+                turns_into: None|Item = None) -> None:
         self.created.append(self)
         
         self.name = name
@@ -105,6 +107,8 @@ class Item:
         self.rarity = rarity
         self.corrupts = corrupts
         self.hardcap_at = hardcap_at
+        self.oneuse = oneuse
+        self.turns_into = turns_into
 
 class Equipment:
     

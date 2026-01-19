@@ -9,3 +9,4 @@ __pycache__
 *.pyc
 *.cpython
 /misc/settings/__pycache__/control_save_path.cpython-314.pyc
+/db_temp_sql
