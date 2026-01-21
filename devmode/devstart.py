@@ -6,7 +6,7 @@ class PrintCommand(Command):
     name = "print"
     description = "Print a message to the console."
     
-    def run(self, *args):
+    def run(self, *args: str):
         message = " | ".join(args)
         console.print(message)
 

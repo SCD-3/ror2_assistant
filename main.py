@@ -11,7 +11,7 @@ class LaunchGameCommand(Command):
     name = 'rungame'
     description = "Run game [#C4CF4E]Risk of Rain 2"
     
-    def run(self, *args):
+    def run(self, *args: str):
         console.print("Launch game via a [blue]Steam[/blue]...")
         webbrowser.open(r'steam://rungameid/632360')
 

@@ -44,7 +44,7 @@ class SetCoinsCommand(Command):
     name = "lunar"
     description = "Set the number of Lunar Coins. Leave empty for max coins."
     
-    def run(self, *args):
+    def run(self, *args: str):
         CONFIG = get_confing()
         SAVEPATH = os.path.join(CONFIG['profile_path'], CONFIG['selected_profile'])
         

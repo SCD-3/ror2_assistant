@@ -186,7 +186,7 @@ class MenuOpener(Command):
 
     child_menu: Menu
     
-    def run(self, *args):
+    def run(self, *args: str):
         parent_menu = Menu.menu_stack[-1]
         FLAG_RUN_AS_MAIN = False
         if len(args) >= 1:
@@ -212,7 +212,7 @@ class ExitCommand(Command):
     def arguments(self) -> Completion:
         return {'all': None}
     
-    def run(self, *args):
+    def run(self, *args: str):
         if len(args) >= 1:
             if args[0] == "all":
                 exit()
@@ -235,7 +235,7 @@ class HelpCommand(Command):
     def arguments(self) -> Completion:
         return {i: None for i in self.__menu.options_names.keys()}
     
-    def run(self, *args) -> Any:
+    def run(self, *args: str) -> Any:
         if len(args) == 0:
             for command in self.__menu.options:
                 console.print(f"{command.name} - {command.description}")

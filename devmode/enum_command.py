@@ -5,7 +5,7 @@ class SeeEnumsCommand(menu.Command):
 
     name = "enums"
 
-    def run(self, *args):
+    def run(self, *args: str):
         for iid, enum in enumerate(enums.ENUMS):
             console.print(f"[#ffaa00]{enum.__name__}")
             for val in enum:
